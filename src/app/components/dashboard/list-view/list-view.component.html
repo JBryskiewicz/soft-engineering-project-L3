@@ -1,11 +1,13 @@
 <div class="list-view-container" style="width: 100vw; height: 100vh">
-  <ng-container *ngFor="let person of results">
+  <ng-container *ngFor="let person of swapiPeople">
     <mat-card appearance="outlined" class="object-card">
       <mat-card-content>
         <mat-list>
-          <mat-list-item *ngFor="let detail of Object.entries(person)">
-            <span style="text-transform: capitalize">{{ detail[0] }}: </span><span>{{ detail[1] }}</span>
-          </mat-list-item>
+          <ng-container *ngFor="let detail of Object.entries(person)">
+            <mat-list-item *ngIf="checkShouldDisplayInfo(detail[0])">
+              <span style="text-transform: capitalize">{{ detail[0] }}: </span><span>{{ detail[1] }}</span>
+            </mat-list-item>
+          </ng-container>
         </mat-list>
       </mat-card-content>
       <mat-card-footer>

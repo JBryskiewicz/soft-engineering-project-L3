@@ -1,31 +1,28 @@
 import {Injectable} from '@angular/core';
 import {map, Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {SwapiDisplayPerson, SwapiPerson} from '../domain/types';
+import {SwapiDisplayPerson, SwapiPersonDto} from '../domain/types';
 
 const swapiPeopleURL = 'https://swapi.dev/api/people';
+const swapiPlantsURL = 'https://swapi.dev/api/planets';
+const swapiSpeciesURL = 'https://swapi.dev/api/species';
 
 @Injectable()
 export class SwapiConnectorService {
 
   constructor(
     private http: HttpClient
-  ) {
-
-  }
+  ) { }
 
   public getPeopleData(): Observable<any> {
-    return this.http.get<any>(`${swapiPeopleURL}`);
+    return this.http.get<any>(swapiPeopleURL);
   }
 
-  /** utility */
+  public getPlanetsData(): Observable<any> {
+    return this.http.get<any>(swapiPlantsURL);
+  }
 
-  //Note: DTO stands for "Data Transfer Object"
-  public dtoToDisplayPerson(dto: any): SwapiDisplayPerson {
-    return {
-      name: dto.name,
-      height: dto.height,
-      "birth year": dto.birth_year,
-    } as SwapiDisplayPerson;
+  public getSpeciesData(): Observable<any> {
+    return this.http.get<any>(swapiSpeciesURL);
   }
 }

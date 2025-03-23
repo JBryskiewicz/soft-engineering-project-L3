@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {SwapiConnectorService} from './services/swapi-connector.service';
-import {SwapiPerson} from './domain/types';
+import {SwapiPersonDto} from './domain/types';
 import {AppStateService} from './services/app-state.service';
 
 @Component({
