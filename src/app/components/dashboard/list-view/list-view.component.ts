@@ -17,6 +17,8 @@ export class ListViewComponent {
 
   protected swapiPeople: SwapiDisplayPerson[] = [];
 
+  protected onlyFavorites: boolean = false;
+
   constructor(
     private state: AppStateService,
   ) {
@@ -37,6 +39,15 @@ export class ListViewComponent {
         isFavorite: false,
       } as SwapiDisplayPerson;
     })
+  }
+
+  protected toggleFavoriteFilter() {
+    this.onlyFavorites = !this.onlyFavorites;
+    this.handleFilterChange();
+  }
+
+  protected handleFilterChange(): void {
+
   }
 
   protected toggleFavorite(object: SwapiDisplayPerson): void {

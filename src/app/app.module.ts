@@ -11,6 +11,8 @@ import {MatList, MatListItem} from '@angular/material/list';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {AppStateService} from './services/app-state.service';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {DbConnectorService} from './services/db-connector.service';
 
 @NgModule({
   declarations: [
@@ -31,10 +33,13 @@ import {AppStateService} from './services/app-state.service';
     MatButton,
     MatButton,
     MatIconButton,
+    MatTabGroup,
+    MatTab,
   ],
   providers: [
     SwapiConnectorService,
     AppStateService,
+    DbConnectorService,
   ],
   bootstrap: [AppComponent]
 })

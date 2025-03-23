@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SwapiConnectorService} from './swapi-connector.service';
 import {BehaviorSubject, combineLatest, take} from 'rxjs';
+import {DbConnectorService} from './db-connector.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AppStateService {
 
   public speciesCache$: BehaviorSubject<any> = new BehaviorSubject([]);
 
-  constructor(private swapi: SwapiConnectorService) {
+  constructor(private swapi: SwapiConnectorService, private db: DbConnectorService) {
 
     // Combine all requests, cash results to correct Cache Arrays when last arrives from API.
     combineLatest([
@@ -28,6 +29,10 @@ export class AppStateService {
           this.saveToCorrectCache(result);
         });
       });
+
+    this.db.getDataFromDB().subscribe(x => {
+      console.log(x);
+    })
   }
 
   private saveToCorrectCache(result: any): void {
