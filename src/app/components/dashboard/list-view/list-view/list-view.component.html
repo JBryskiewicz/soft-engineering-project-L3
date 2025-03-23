@@ -1,0 +1,23 @@
+<div class="list-view-container" style="width: 100vw; height: 100vh">
+  <ng-container *ngFor="let person of results">
+    <mat-card appearance="outlined" class="object-card">
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let detail of Object.entries(person)">
+            <span style="text-transform: capitalize">{{ detail[0] }}: </span><span>{{ detail[1] }}</span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-footer>
+        <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px;">
+          <button mat-button color="primary">
+            Show details
+          </button>
+          <button mat-icon-button color="primary">
+            <mat-icon>favorite_outlined</mat-icon>
+          </button>
+        </div>
+      </mat-card-footer>
+    </mat-card>
+  </ng-container>
+</div>
