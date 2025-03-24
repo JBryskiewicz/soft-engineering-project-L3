@@ -1,39 +1,46 @@
 <div class="list-view">
-  <mat-tab-group [animationDuration]="0">
-    <mat-tab label="Characters">
-      <div class="list-view-container">
-        <ng-container *ngFor="let person of swapiPeople">
-          <mat-card appearance="outlined" class="object-card">
-            <mat-card-content>
-              <mat-list>
-                <ng-container *ngFor="let detail of Object.entries(person)">
-                  <mat-list-item *ngIf="checkShouldDisplayInfo(detail[0])">
-                    <span style="text-transform: capitalize">{{ detail[0] }}: </span>
-                    <span>{{ detail[1] }}</span>
-                  </mat-list-item>
-                </ng-container>
-              </mat-list>
-            </mat-card-content>
-            <mat-card-footer>
-              <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px;">
-                <button mat-button color="primary">
-                  Show details
-                </button>
-                <button mat-icon-button color="primary">
-                  <mat-icon>favorite_outlined</mat-icon>
-                </button>
-              </div>
-            </mat-card-footer>
-          </mat-card>
-        </ng-container>
-      </div>
-    </mat-tab>
-    <mat-tab label="Planets">
-      Work in Progress
-    </mat-tab>
-  </mat-tab-group>
+  <ng-container *ngIf="state.currentUser; else peopleTabLoader">
 
-  <div class="floating-filter-button">
+    <mat-tab-group [animationDuration]="0">
+      <mat-tab label="Characters">
+        <div class="list-view-container">
+          <ng-container *ngFor="let person of swapiPeople">
+            <mat-card appearance="outlined" class="object-card">
+              <mat-card-content>
+                <mat-list>
+                  <ng-container *ngFor="let detail of Object.entries(person)">
+                    <mat-list-item *ngIf="checkShouldDisplayInfo(detail[0])">
+                      <span style="text-transform: capitalize">{{ detail[0] }}: </span>
+                      <span>{{ detail[1] }}</span>
+                    </mat-list-item>
+                  </ng-container>
+                </mat-list>
+              </mat-card-content>
+              <mat-card-footer>
+                <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px;">
+                  <button mat-button color="primary">
+                    Show details
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="toggleFavorite(person)"
+                  >
+                    <mat-icon>
+                      {{ person.isFavorite ? 'favorite' : 'favorite_outlined' }}
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-card-footer>
+            </mat-card>
+          </ng-container>
+        </div>
+      </mat-tab>
+      <mat-tab label="Planets">
+        Work in Progress
+      </mat-tab>
+    </mat-tab-group>
+    <div class="floating-filter-button">
       <button
         (click)="toggleFavoriteFilter()"
         [style]="onlyFavorites ? 'background-color: #a1a1a1': ''"
@@ -42,5 +49,9 @@
       >
         Show only favorites
       </button>
-  </div>
+    </div>
+  </ng-container>
+  <ng-template #peopleTabLoader>
+    Loading...
+  </ng-template>
 </div>

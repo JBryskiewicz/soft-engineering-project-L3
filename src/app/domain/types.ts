@@ -1,3 +1,14 @@
+/** SoftEng App - User interfaces */
+
+export interface AppUser {
+  id: string;
+  username: string;
+  password: string;
+  favoritePeople: SwapiDisplayPerson[]
+}
+
+/** Swapi - People interfaces */
+
 export interface SwapiDisplayPerson {
   url: string // Consider to be ID
   name: string;

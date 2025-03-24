@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {SwapiConnectorService} from './swapi-connector.service';
 import {BehaviorSubject, combineLatest, take} from 'rxjs';
 import {DbConnectorService} from './db-connector.service';
+import {AppUser} from '../domain/types';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,10 @@ export class AppStateService {
 
   public speciesCache$: BehaviorSubject<any> = new BehaviorSubject([]);
 
-  constructor(private swapi: SwapiConnectorService, private db: DbConnectorService) {
+  // Cache current user information
+  public currentUser: AppUser | null = null;
 
+  constructor(private swapi: SwapiConnectorService, private db: DbConnectorService) {
     // Combine all requests, cash results to correct Cache Arrays when last arrives from API.
     combineLatest([
       this.swapi.getPlanetsData(),
@@ -30,8 +33,9 @@ export class AppStateService {
         });
       });
 
-    this.db.getDataFromDB().subscribe(x => {
-      console.log(x);
+    // TODO this is temp to work on one desired user, change when login system is done
+    this.db.getUserById('k0Uk9I5fh9pMAq3rAw5q').subscribe(user => {
+      this.currentUser = user;
     })
   }
 

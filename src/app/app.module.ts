@@ -13,6 +13,10 @@ import {MatIcon} from '@angular/material/icon';
 import {AppStateService} from './services/app-state.service';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {DbConnectorService} from './services/db-connector.service';
+import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
+import {getFirestore, provideFirestore} from '@angular/fire/firestore';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import {environment} from '../environments/env';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,9 @@ import {DbConnectorService} from './services/db-connector.service';
     SwapiConnectorService,
     AppStateService,
     DbConnectorService,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
   bootstrap: [AppComponent]
 })

@@ -4,6 +4,9 @@ import {SwapiConnectorService} from '../../../services/swapi-connector.service';
 import {AppStateService} from '../../../services/app-state.service';
 import {forkJoin, merge, mergeAll} from 'rxjs';
 import {combineLatest} from 'rxjs/internal/operators/combineLatest';
+import {DbConnectorService} from '../../../services/db-connector.service';
+
+// TODO KUBA TASK => FIX LOADER!!!
 
 @Component({
   selector: 'list-view',
@@ -15,16 +18,19 @@ export class ListViewComponent {
 
   protected readonly Object = Object;
 
+  protected swapiPeopleControl: SwapiDisplayPerson[] = [];
+
   protected swapiPeople: SwapiDisplayPerson[] = [];
 
   protected onlyFavorites: boolean = false;
 
   constructor(
-    private state: AppStateService,
+    protected state: AppStateService,
+    private db: DbConnectorService,
   ) {
-      this.state.peopleCache$.subscribe(people => {
-        this.buildPeopleViewData(people);
-      });
+    this.state.peopleCache$.subscribe(people => {
+      this.buildPeopleViewData(people);
+    });
   }
 
   private buildPeopleViewData(people: SwapiPersonDto[]): void {
@@ -36,9 +42,26 @@ export class ListViewComponent {
         name: person.name,
         species: species ? species.name : 'Unknown',
         homeworld: homeworld ? homeworld.name : 'Unknown',
-        isFavorite: false,
+        isFavorite: this.state.currentUser?.favoritePeople.find(p => p.url === person.url) || false,
       } as SwapiDisplayPerson;
     })
+  }
+
+  private updatePeopleViewData(): void {
+    const userFavorites = this.state.currentUser?.favoritePeople!;
+    this.swapiPeople = this.swapiPeople.map(person => {
+      if (userFavorites.some(p => p.url === person.url)) {
+        return {
+          ...person,
+          isFavorite: true,
+        }
+      } else {
+        return {
+          ...person,
+          isFavorite: false,
+        };
+      }
+    });
   }
 
   protected toggleFavoriteFilter() {
@@ -47,11 +70,40 @@ export class ListViewComponent {
   }
 
   protected handleFilterChange(): void {
-
+    if (this.onlyFavorites) {
+      this.swapiPeopleControl = this.swapiPeople;
+      this.swapiPeople = this.swapiPeople.filter(person => person.isFavorite);
+    } else {
+      this.swapiPeople = this.swapiPeopleControl;
+    }
   }
 
   protected toggleFavorite(object: SwapiDisplayPerson): void {
-    // TODO for Kuba => implement.
+    const user = this.state.currentUser!;
+
+    if (object.isFavorite) {
+      const filteredFavorites = user.favoritePeople.filter(obj => obj.url !== object.url);
+      const modifiedUser = {
+        ...user,
+        favoritePeople: filteredFavorites
+      };
+      this.db.updateUserById(user.id, modifiedUser).subscribe(() => {
+        this.updatePeopleViewData();
+      });
+      return;
+    }
+
+    const currentFavorites = user.favoritePeople;
+    if (!currentFavorites.some(cf => cf.url === object.url)) {
+      currentFavorites.push({...object, isFavorite: true});
+      const modifiedUser = {
+        ...user,
+        favoritePeople: currentFavorites
+      }
+      this.db.updateUserById(user.id, modifiedUser).subscribe(() => {
+        this.updatePeopleViewData();
+      });
+    }
   }
 
   protected showDetails(object: SwapiDisplayPerson): void {
