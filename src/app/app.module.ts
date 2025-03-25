@@ -17,11 +17,16 @@ import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import {environment} from '../environments/env';
+import { LoginPageComponent } from './components/login/login-page.component';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListViewComponent
+    ListViewComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,10 @@ import {environment} from '../environments/env';
     MatIconButton,
     MatTabGroup,
     MatTab,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
   ],
   providers: [
     SwapiConnectorService,

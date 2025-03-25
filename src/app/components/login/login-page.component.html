@@ -1,0 +1,39 @@
+<div class="login-view">
+  <div class="login-view__form">
+
+    <h2>{{ isLoginMode ? 'Login' : 'Register' }}</h2>
+
+    <div class="login-view__form-inputs">
+      <form [formGroup]="loginForm">
+          <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Login</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Username"
+              formControlName="username"
+            >
+          </mat-form-field>
+        <mat-form-field style="width: 100%;" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+          >
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="login-view__form-buttons">
+      <button mat-button color="primary" (click)="switchLoginMode();">
+        {{ isLoginMode ? 'Sign up instead' : 'Log in instead' }}
+      </button>
+      <button mat-raised-button color="primary" (click)="handleLoginOrRegister()">
+        {{ isLoginMode ? 'Log in' : 'Register' }}
+      </button>
+    </div>
+
+  </div>
+</div>
