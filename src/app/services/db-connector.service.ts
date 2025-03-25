@@ -1,5 +1,16 @@
 import {Injectable} from '@angular/core';
-import {addDoc, collection, doc, docData, Firestore, getDocs, query, updateDoc, where} from '@angular/fire/firestore';
+import {
+  addDoc,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  Firestore,
+  getDocs,
+  query,
+  updateDoc,
+  where
+} from '@angular/fire/firestore';
 import {from, Observable, of} from 'rxjs';
 
 @Injectable({
@@ -8,6 +19,11 @@ import {from, Observable, of} from 'rxjs';
 export class DbConnectorService {
 
   constructor(private firestore: Firestore) {
+  }
+
+  public getUsers(): Observable<any[]> {
+    const usersCollection = collection(this.firestore, 'items');
+    return collectionData(usersCollection, { idField: 'id' });
   }
 
   public getUserByUsername(username: string): Observable<any> {

@@ -1,6 +1,22 @@
 <div class="list-view">
-  <ng-container *ngIf="state.currentUser; else peopleTabLoader">
-
+  <ng-container *ngIf="state.currentUser; else notLoggedIn">
+    <header class="list-view-header">
+      <button
+        (click)="toggleFavoriteFilter()"
+        [style]="onlyFavorites ? 'background-color: #a1a1a1': ''"
+        mat-stroked-button
+        color="primary"
+      >
+        Show only favorites
+      </button>
+      <button
+        (click)="handleLogoutButton()"
+        mat-stroked-button
+        color="primary"
+      >
+        Log out
+      </button>
+    </header>
     <mat-tab-group [animationDuration]="0">
       <mat-tab label="Characters">
         <div class="list-view-container">
@@ -40,18 +56,11 @@
         Work in Progress
       </mat-tab>
     </mat-tab-group>
-    <div class="floating-filter-button">
-      <button
-        (click)="toggleFavoriteFilter()"
-        [style]="onlyFavorites ? 'background-color: #a1a1a1': ''"
-        mat-stroked-button
-        color="primary"
-      >
-        Show only favorites
-      </button>
-    </div>
   </ng-container>
   <ng-template #peopleTabLoader>
     Loading...
+  </ng-template>
+  <ng-template #notLoggedIn>
+    Error: Please log in to view dashboard.
   </ng-template>
 </div>

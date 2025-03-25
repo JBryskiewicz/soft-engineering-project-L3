@@ -3,6 +3,8 @@ import {SwapiConnectorService} from './swapi-connector.service';
 import {BehaviorSubject, combineLatest, take} from 'rxjs';
 import {DbConnectorService} from './db-connector.service';
 import {AppUser} from '../domain/types';
+import {AUTH_TOKEN_KEY} from '../../environments/env';
+import {user} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +34,21 @@ export class AppStateService {
           this.saveToCorrectCache(result);
         });
       });
+    this.cacheLoggedInUser();
+  }
 
-    // TODO this is temp to work on one desired user, change when login system is done
-    this.db.getUserById('k0Uk9I5fh9pMAq3rAw5q').subscribe(user => {
-      this.currentUser = user;
-    })
+  public cacheLoggedInUser(): void {
+    const userId = localStorage.getItem(AUTH_TOKEN_KEY);
+    if (userId) {
+      this.db.getUserById(userId).subscribe(user => {
+        this.currentUser = user;
+        console.log(this.currentUser);
+      })
+    }
+  }
+
+  public clearLoggedInUser(): void {
+    this.currentUser = null;
   }
 
   private saveToCorrectCache(result: any): void {

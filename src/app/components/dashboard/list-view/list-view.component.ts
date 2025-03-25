@@ -5,6 +5,8 @@ import {AppStateService} from '../../../services/app-state.service';
 import {forkJoin, merge, mergeAll} from 'rxjs';
 import {combineLatest} from 'rxjs/internal/operators/combineLatest';
 import {DbConnectorService} from '../../../services/db-connector.service';
+import {AUTH_TOKEN_KEY} from '../../../../environments/env';
+import {Router} from '@angular/router';
 
 // TODO KUBA TASK => FIX LOADER!!!
 
@@ -24,9 +26,12 @@ export class ListViewComponent {
 
   protected onlyFavorites: boolean = false;
 
+  protected isPeopleDataReady: boolean = false;
+
   constructor(
     protected state: AppStateService,
     private db: DbConnectorService,
+    private router: Router,
   ) {
     this.state.peopleCache$.subscribe(people => {
       this.buildPeopleViewData(people);
@@ -62,6 +67,12 @@ export class ListViewComponent {
         };
       }
     });
+  }
+
+  protected handleLogoutButton(): void {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    this.state.clearLoggedInUser();
+    this.router.navigate(['']);
   }
 
   protected toggleFavoriteFilter() {

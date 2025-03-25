@@ -6,7 +6,7 @@
     <div class="login-view__form-inputs">
       <form [formGroup]="loginForm">
           <mat-form-field style="width: 100%;" appearance="outline">
-            <mat-label>Login</mat-label>
+            <mat-label>{{ isLoginMode ? 'Login' : 'Username' }}</mat-label>
             <input
               matInput
               type="text"
