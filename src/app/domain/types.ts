@@ -4,7 +4,8 @@ export interface AppUser {
   id: string;
   username: string;
   password: string;
-  favoritePeople: SwapiDisplayPerson[]
+  favoritePeople: SwapiDisplayPerson[];
+  favoriteStarships: SwapiDisplayStarship[];
 }
 
 /** Swapi - People interfaces */
@@ -34,4 +35,33 @@ export interface SwapiPersonDto {
   starships: string[],
   created: string,
   edited: string,
+}
+
+export interface SwapiDisplayStarship {
+  url: string;
+  name: string;
+  model: string;
+  manufacturer: string;
+  isFavorite: boolean;
+}
+
+export interface SwapiStarshipDto {
+  url: string;
+  MGLT: string;
+  cargo_capacity: string;
+  consumables: string;
+  cost_in_credits: string;
+  created: string;
+  crew: string;
+  edited: string;
+  hyperdrive_rating: string;
+  length: string;
+  manufacturer: string;
+  max_atmosphering_speed: string;
+  model: string;
+  name: string;
+  passengers: string;
+  films: string[];
+  pilots: string[];
+  starship_class: string;
 }

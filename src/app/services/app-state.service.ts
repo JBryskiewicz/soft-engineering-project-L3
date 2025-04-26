@@ -18,6 +18,8 @@ export class AppStateService {
 
   public speciesCache$: BehaviorSubject<any> = new BehaviorSubject([]);
 
+  public starshipsCache$: BehaviorSubject<any> = new BehaviorSubject([]);
+
   // Cache current user information
   public currentUser: AppUser | null = null;
 
@@ -26,6 +28,7 @@ export class AppStateService {
     combineLatest([
       this.swapi.getPlanetsData(),
       this.swapi.getSpeciesData(),
+      this.swapi.getStarshipsData(),
       this.swapi.getPeopleData(), // Make sure that people are always last here!
     ])
       .pipe(take(1))
@@ -63,6 +66,9 @@ export class AppStateService {
         break;
       case 'species':
         this.speciesCache$.next(result.results);
+        break;
+      case 'starships':
+        this.starshipsCache$.next(result.results);
         break;
       default:
         console.error(`Unknown identifier: ${identifier}`);

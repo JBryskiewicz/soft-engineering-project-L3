@@ -1,0 +1,27 @@
+.list-view {
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  .list-view-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0 76px;
+  }
+
+  .list-view-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 32px 0;
+
+    .object-card {
+      width: 430px;
+      height: 240px;
+    }
+  }
+}

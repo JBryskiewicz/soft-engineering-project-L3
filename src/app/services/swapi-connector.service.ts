@@ -6,6 +6,7 @@ import {SwapiDisplayPerson, SwapiPersonDto} from '../domain/types';
 const swapiPeopleURL = 'https://swapi.dev/api/people';
 const swapiPlantsURL = 'https://swapi.dev/api/planets';
 const swapiSpeciesURL = 'https://swapi.dev/api/species';
+const swapiStarshipsURL = 'https://swapi.dev/api/starships';
 
 @Injectable()
 export class SwapiConnectorService {
@@ -24,5 +25,9 @@ export class SwapiConnectorService {
 
   public getSpeciesData(): Observable<any> {
     return this.http.get<any>(swapiSpeciesURL);
+  }
+
+  public getStarshipsData(): Observable<any> {
+    return this.http.get<any>(swapiStarshipsURL);
   }
 }
