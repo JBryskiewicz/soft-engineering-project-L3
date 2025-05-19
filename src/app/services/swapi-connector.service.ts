@@ -7,7 +7,7 @@ const swapiPeopleURL = 'https://swapi.tech/api/people/?page=1&limit=20';
 const swapiPersonDetailsURL = 'https://swapi.tech/api/people'
 const swapiPlantsURL = 'https://swapi.tech/api/planets/?page=1&limit=20';
 const swapiSpeciesURL = 'https://swapi.tech/api/species/?page=1&limit=20';
-
+const swapiStarshipsURL = 'https://swapi.dev/api/starships?page=1&limit=20';
 @Injectable()
 export class SwapiConnectorService {
 
@@ -29,5 +29,9 @@ export class SwapiConnectorService {
 
   public getPersonDetails(id: string): Observable<any> {
     return this.http.get<any>(`${swapiPersonDetailsURL}/${id}`)
+  }
+
+  public getStarshipsData(): Observable<any> {
+    return this.http.get<any>(swapiStarshipsURL);
   }
 }

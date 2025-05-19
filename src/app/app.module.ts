@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import {SwapiConnectorService} from './services/swapi-connector.service';
 import {HttpClientModule} from '@angular/common/http';
 import { ListViewComponent } from './components/dashboard/list-view/list-view.component';
+import { ListViewShipsComponent } from './components/dashboard/list-view-ships/list-view-ships.component';
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader} from "@angular/material/card";
 import {MatList, MatListItem} from '@angular/material/list';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -26,6 +27,7 @@ import {ReactiveFormsModule} from '@angular/forms';
   declarations: [
     AppComponent,
     ListViewComponent,
+    ListViewShipsComponent,
     LoginPageComponent
   ],
   imports: [

@@ -1,9 +1,9 @@
 <div class="list-view">
-  <ng-container *ngIf="state.currentUser$.value; else notLoggedIn">
+  <ng-container *ngIf="state.currentUser; else notLoggedIn">
     <header class="list-view-header">
       <button
         (click)="toggleFavoriteFilter()"
-        [style]="onlyFavorites ? 'background-color: #a1a1a1': ''"
+        [style]="onlyFavorites ? 'background-color: #a1a1a1' : ''"
         mat-stroked-button
         color="primary"
       >
@@ -14,17 +14,17 @@
         mat-stroked-button
         color="primary"
       >
-        Log out {{state.currentUser$.value.username}}
+        Log out
       </button>
     </header>
     <mat-tab-group [animationDuration]="0">
-      <mat-tab label="Characters">
+      <mat-tab label="Starships">
         <div class="list-view-container">
-          <ng-container *ngFor="let person of swapiPeople">
+          <ng-container *ngFor="let ship of swapiShips">
             <mat-card appearance="outlined" class="object-card">
               <mat-card-content>
                 <mat-list>
-                  <ng-container *ngFor="let detail of Object.entries(person)">
+                  <ng-container *ngFor="let detail of Object.entries(ship)">
                     <mat-list-item *ngIf="checkShouldDisplayInfo(detail[0])">
                       <span style="text-transform: capitalize">{{ detail[0] }}: </span>
                       <span>{{ detail[1] }}</span>
@@ -33,17 +33,17 @@
                 </mat-list>
               </mat-card-content>
               <mat-card-footer>
-                <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px;">
                   <button mat-button color="primary">
                     Show details
                   </button>
                   <button
                     mat-icon-button
                     color="primary"
-                    (click)="toggleFavorite(person)"
+                    (click)="toggleFavorite(ship)"
                   >
                     <mat-icon>
-                      {{ person.isFavorite ? 'favorite' : 'favorite_outlined' }}
+                      {{ ship.isFavorite ? 'favorite' : 'favorite_outlined' }}
                     </mat-icon>
                   </button>
                 </div>
@@ -57,12 +57,12 @@
       </mat-tab>
     </mat-tab-group>
   </ng-container>
+
   <ng-template #peopleTabLoader>
     Loading...
   </ng-template>
+
   <ng-template #notLoggedIn>
     Error: Please log in to view dashboard.
   </ng-template>
 </div>
-
-<router-outlet></router-outlet>
