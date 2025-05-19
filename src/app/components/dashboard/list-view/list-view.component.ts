@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {SwapiDisplayPerson, SwapiPersonDto} from '../../../domain/types';
+import {Component, OnInit} from '@angular/core';
+import {NewSwapiPersonDto, SwapiDisplayPerson, SwapiPersonDto} from '../../../domain/types';
 import {SwapiConnectorService} from '../../../services/swapi-connector.service';
 import {AppStateService} from '../../../services/app-state.service';
 import {forkJoin, merge, mergeAll} from 'rxjs';
@@ -16,13 +16,13 @@ import {Router} from '@angular/router';
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.scss'
 })
-export class ListViewComponent {
+export class ListViewComponent implements OnInit {
 
   protected readonly Object = Object;
 
   protected swapiPeopleControl: SwapiDisplayPerson[] = [];
 
-  protected swapiPeople: SwapiDisplayPerson[] = [];
+  protected swapiPeople: any[] = [];
 
   protected onlyFavorites: boolean = false;
 
@@ -32,30 +32,38 @@ export class ListViewComponent {
     protected state: AppStateService,
     private db: DbConnectorService,
     private router: Router,
-  ) {
-    this.state.peopleCache$.subscribe(people => {
-      this.buildPeopleViewData(people);
-    });
-  }
+  ) {}
 
-  private buildPeopleViewData(people: SwapiPersonDto[]): void {
-    this.swapiPeople = people.map(person => {
-      const species = this.state.speciesCache$.getValue().find((s: any) => s.url === person.species[0]);
-      const homeworld = this.state.planetsCache$.getValue().find((s: any) => s.url === person.homeworld);
-      return {
-        url: person.url,
-        name: person.name,
-        species: species ? species.name : 'Unknown',
-        homeworld: homeworld ? homeworld.name : 'Unknown',
-        isFavorite: this.state.currentUser?.favoritePeople.find(p => p.url === person.url) || false,
-      } as SwapiDisplayPerson;
+  ngOnInit() {
+    this.state.isAppReady$.subscribe(isReady => {
+      if (isReady) {
+        this.state.peopleCache$.subscribe(people => {
+          this.buildPeopleViewData(people);
+        });
+      }
     })
   }
 
+  // Forced change of API destroyed this feature a bit, welp...
+  private buildPeopleViewData(people: NewSwapiPersonDto[]): void {
+    this.swapiPeople = people.map(person => {
+      return {
+        uid: person.uid,
+        name: person.name,
+        url: person.url,
+        isFavorite: this.matchFavoritePersonFromSaved(person),
+      } as NewSwapiPersonDto;
+    });
+  }
+
+  private matchFavoritePersonFromSaved(person: NewSwapiPersonDto): boolean {
+    return Boolean(this.state.currentUser$?.value.favoritePeople.find((p: any) => p.url === person.url));
+  }
+
   private updatePeopleViewData(): void {
-    const userFavorites = this.state.currentUser?.favoritePeople!;
+    const userFavorites = this.state.currentUser$?.value.favoritePeople!;
     this.swapiPeople = this.swapiPeople.map(person => {
-      if (userFavorites.some(p => p.url === person.url)) {
+      if (userFavorites.some((p: any) => p.url === person.url)) {
         return {
           ...person,
           isFavorite: true,
@@ -90,10 +98,10 @@ export class ListViewComponent {
   }
 
   protected toggleFavorite(object: SwapiDisplayPerson): void {
-    const user = this.state.currentUser!;
+    const user = this.state.currentUser$.value;
 
     if (object.isFavorite) {
-      const filteredFavorites = user.favoritePeople.filter(obj => obj.url !== object.url);
+      const filteredFavorites = user.favoritePeople.filter((obj: any) => obj.url !== object.url);
       const modifiedUser = {
         ...user,
         favoritePeople: filteredFavorites
@@ -105,7 +113,7 @@ export class ListViewComponent {
     }
 
     const currentFavorites = user.favoritePeople;
-    if (!currentFavorites.some(cf => cf.url === object.url)) {
+    if (!currentFavorites.some((cf: any) => cf.url === object.url)) {
       currentFavorites.push({...object, isFavorite: true});
       const modifiedUser = {
         ...user,
@@ -124,7 +132,7 @@ export class ListViewComponent {
   }
 
   protected checkShouldDisplayInfo(detail: string): boolean {
-    return detail !== 'url' && detail !== 'isFavorite'
+    return detail !== 'url' && detail !== 'isFavorite' && detail !== 'uid'
   }
 
 }

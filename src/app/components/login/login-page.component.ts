@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import {FormBuilder, UntypedFormGroup} from '@angular/forms';
 import {DbConnectorService} from '../../services/db-connector.service';
 import {take} from 'rxjs';
@@ -31,6 +31,7 @@ export class LoginPageComponent {
     private state: AppStateService,
     private router: Router,
     private formBuilder: FormBuilder,
+    private ngZone: NgZone,
   ) {
     this.loginForm = this.formBuilder.group(INIT_FORM);
   }
@@ -49,9 +50,9 @@ export class LoginPageComponent {
     const {username, password} = this.loginForm.value;
     this.db.getUserByUsername(username).pipe(take(1)).subscribe(user => {
       if (user.password === password) {
-        this.router.navigate(['/dashboard']);
-        localStorage.setItem(AUTH_TOKEN_KEY, user.id);
-        this.state.cacheLoggedInUser();
+          this.router.navigate(['/dashboard']);
+          localStorage.setItem(AUTH_TOKEN_KEY, user.id);
+          this.state.cacheLoggedInUser();
       }
       this.loginForm.patchValue(INIT_FORM);
     });

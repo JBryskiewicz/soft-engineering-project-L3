@@ -22,6 +22,9 @@
     .object-card {
       width: 430px;
       height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
 }

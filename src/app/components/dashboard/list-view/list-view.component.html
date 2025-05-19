@@ -1,5 +1,5 @@
 <div class="list-view">
-  <ng-container *ngIf="state.currentUser; else notLoggedIn">
+  <ng-container *ngIf="state.currentUser$.value; else notLoggedIn">
     <header class="list-view-header">
       <button
         (click)="toggleFavoriteFilter()"
@@ -14,7 +14,7 @@
         mat-stroked-button
         color="primary"
       >
-        Log out
+        Log out {{state.currentUser$.value.username}}
       </button>
     </header>
     <mat-tab-group [animationDuration]="0">
@@ -33,7 +33,7 @@
                 </mat-list>
               </mat-card-content>
               <mat-card-footer>
-                <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px;">
+                <div style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px; margin-bottom: 16px;">
                   <button mat-button color="primary">
                     Show details
                   </button>

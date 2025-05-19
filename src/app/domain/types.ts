@@ -9,6 +9,13 @@ export interface AppUser {
 
 /** Swapi - People interfaces */
 
+export interface NewSwapiPersonDto {
+  uid: string,
+  name: string,
+  url: string,
+  isFavorite?: boolean,
+}
+
 export interface SwapiDisplayPerson {
   url: string // Consider to be ID
   name: string;
