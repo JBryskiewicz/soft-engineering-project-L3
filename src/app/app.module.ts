@@ -23,13 +23,15 @@ import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import { DetailsDialogComponent } from './components/commons/details-dialog/details-dialog/details-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListViewComponent,
     ListViewShipsComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    DetailsDialogComponent
   ],
     imports: [
         BrowserModule,

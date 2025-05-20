@@ -1,0 +1,13 @@
+<div class="object__details">
+  <ng-container *ngIf="isLoaded; else isLoading">
+    <p>Description: {{ description }}</p>
+    <p>Name: {{ properties.name }}</p>
+    <p>Gander: {{ properties.gender }}</p>
+    <p>Height: {{ properties.height }}</p>
+    <p>Year of Birth: {{ properties.birth_year }}</p>
+  </ng-container>
+
+  <ng-template #isLoading>
+    <h1>Loading...</h1>
+  </ng-template>
+</div>

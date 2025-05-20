@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {AppUser, NewSwapiPersonDto, SwapiDisplayPerson, SwapiPersonDto} from '../../../domain/types';
 import {SwapiConnectorService} from '../../../services/swapi-connector.service';
 import {AppStateService} from '../../../services/app-state.service';
-import {forkJoin, merge, mergeAll} from 'rxjs';
+import {forkJoin, merge, mergeAll, take} from 'rxjs';
 import {combineLatest} from 'rxjs/internal/operators/combineLatest';
 import {DbConnectorService} from '../../../services/db-connector.service';
 import {AUTH_TOKEN_KEY} from '../../../../environments/env';
 import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {DetailsDialogComponent} from '../../commons/details-dialog/details-dialog/details-dialog.component';
 
 // TODO KUBA TASK => FIX LOADER!!!
 
@@ -31,8 +33,10 @@ export class ListViewComponent implements OnInit {
   constructor(
     protected state: AppStateService,
     private db: DbConnectorService,
+    private dialog: MatDialog,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.state.currentUser$.subscribe((user: AppUser) => {
@@ -126,9 +130,13 @@ export class ListViewComponent implements OnInit {
   }
 
   protected showDetails(object: SwapiDisplayPerson): void {
-    // TODO for Ignacy => implement.
-    // Hints better to use SwapiPersonDto
-    // Best option is to use mat-dialog module
+    this.dialog.open(DetailsDialogComponent, {
+      data: object
+    }).afterClosed()
+      .pipe(take(1))
+      .subscribe(result => {
+        console.log(result);
+      });
   }
 
   protected checkShouldDisplayInfo(detail: string): boolean {
