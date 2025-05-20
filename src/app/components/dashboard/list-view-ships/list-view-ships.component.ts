@@ -40,15 +40,15 @@ export class ListViewShipsComponent {
         name: starship.name,
         model: starship.model,
         manufacturer: starship.manufacturer,
-        isFavorite: this.state.currentUser?.favoriteStarships.find(s => s.url === starship.url) || false,
+        isFavorite: this.state.currentUser$.value?.favoriteStarships.find((s: any) => s.url === starship.url) || false,
       } as SwapiDisplayStarship;
     });
   }
 
   private updateShipsViewData(): void {
-    const userFavorites = this.state.currentUser?.favoriteStarships!;
+    const userFavorites = this.state.currentUser$.value?.favoriteStarships!;
     this.swapiShips = this.swapiShips.map(ship => {
-      if (userFavorites.some(s => s.url === ship.url)) {
+      if (userFavorites.some((s: any) => s.url === ship.url)) {
         return {
           ...ship,
           isFavorite: true,
@@ -83,10 +83,10 @@ export class ListViewShipsComponent {
   }
 
   protected toggleFavorite(ship: SwapiDisplayStarship): void {
-    const user = this.state.currentUser!;
+    const user = this.state.currentUser$.value;
 
     if (ship.isFavorite) {
-      const filteredFavorites = user.favoriteStarships.filter(s => s.url !== ship.url);
+      const filteredFavorites = user.favoriteStarships.filter((s: any) => s.url !== ship.url);
       const modifiedUser = {
         ...user,
         favoriteStarships: filteredFavorites
@@ -98,7 +98,7 @@ export class ListViewShipsComponent {
     }
 
     const currentFavorites = user.favoriteStarships;
-    if (!currentFavorites.some(s => s.url === ship.url)) {
+    if (!currentFavorites.some((s: any) => s.url === ship.url)) {
       currentFavorites.push({ ...ship, isFavorite: true });
       const modifiedUser = {
         ...user,

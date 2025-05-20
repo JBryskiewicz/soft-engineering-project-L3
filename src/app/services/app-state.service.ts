@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {SwapiConnectorService} from './swapi-connector.service';
-import {BehaviorSubject, combineLatest, take} from 'rxjs';
+import {BehaviorSubject, combineLatest} from 'rxjs';
 import {DbConnectorService} from './db-connector.service';
 import {AppUser} from '../domain/types';
 import {AUTH_TOKEN_KEY} from '../../environments/env';
@@ -24,19 +24,19 @@ export class AppStateService {
 
   public isAppReady$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private swapi: SwapiConnectorService, private db: DbConnectorService) {}
-
-  public cacheLoggedInUser(): void {
-    this.isAppReady$.next(false);
-    const userId = localStorage.getItem(AUTH_TOKEN_KEY);
-    if (userId) {
-      this.db.getUserById(userId)
-        .pipe(take(1))
-        .subscribe((user: AppUser) => {
-          this.currentUser$.next(user);
-          this.fetchInitialData();
-        })
+  constructor(private swapi: SwapiConnectorService, private db: DbConnectorService) {
+    const cachedUser = localStorage.getItem(AUTH_TOKEN_KEY)
+    if (cachedUser) {
+      this.currentUser$.next(JSON.parse(cachedUser));
+      this.fetchInitialData();
     }
+  }
+
+  public cacheLoggedInUser(user: AppUser): void {
+    this.isAppReady$.next(false);
+    this.currentUser$.next(user);
+    localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(user));
+    this.fetchInitialData();
   }
 
   public clearLoggedInUser(): void {

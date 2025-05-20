@@ -32,9 +32,7 @@ export class LoginPageComponent {
     private state: AppStateService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private ngZone: NgZone,
   ) {
-    // this.loginForm = this.formBuilder.group(INIT_FORM);
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(5)]],
@@ -55,23 +53,17 @@ export class LoginPageComponent {
       : this.registerAction();
   }
 
+  // this is login mockup, real auth should not be done this way
   private loginAction(): void {
     const {username, password} = this.loginForm.value;
     this.db.getUserByUsername(username).pipe(take(1)).subscribe(user => {
       if (user && user.password === password) {
-        localStorage.setItem(AUTH_TOKEN_KEY, user.id);
-        this.state.cacheLoggedInUser();
+        this.state.cacheLoggedInUser(user);
         this.router.navigate(['/dashboard']);
       } else {
         console.error('Invalid username or password');
       }
       this.loginForm.reset();
-      // if (user.password === password) {
-      //   this.router.navigate(['/dashboard']);
-      //   localStorage.setItem(AUTH_TOKEN_KEY, user.id);
-      //   this.state.cacheLoggedInUser();
-      // }
-      // this.loginForm.patchValue(INIT_FORM);
     });
   }
 
@@ -85,9 +77,6 @@ export class LoginPageComponent {
           favoritePeople: [],
         }).subscribe(() => {
           console.log('User registered successfully');
-          // this.loginForm.reset();
-          // this.isLoginMode = true;
-          // this.loginForm.patchValue({ username, password: '' });
           this.isLoginMode = true;
           this.loginForm.reset({ username, password: ''});
         });
@@ -95,7 +84,6 @@ export class LoginPageComponent {
         console.error('User exists... Sign up process failed.'); // print to console (not a proper handling)
         this.loginForm.reset();
       }
-      // this.loginForm.patchValue(INIT_FORM);
     });
   }
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NewSwapiPersonDto, SwapiDisplayPerson, SwapiPersonDto} from '../../../domain/types';
+import {AppUser, NewSwapiPersonDto, SwapiDisplayPerson, SwapiPersonDto} from '../../../domain/types';
 import {SwapiConnectorService} from '../../../services/swapi-connector.service';
 import {AppStateService} from '../../../services/app-state.service';
 import {forkJoin, merge, mergeAll} from 'rxjs';
@@ -35,8 +35,8 @@ export class ListViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.state.isAppReady$.subscribe(isReady => {
-      if (isReady) {
+    this.state.currentUser$.subscribe((user: AppUser) => {
+      if (user) {
         this.state.peopleCache$.subscribe(people => {
           this.buildPeopleViewData(people);
         });

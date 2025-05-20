@@ -22,6 +22,7 @@ import { LoginPageComponent } from './components/login/login-page.component';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -30,27 +31,28 @@ import {ReactiveFormsModule} from '@angular/forms';
     ListViewShipsComponent,
     LoginPageComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatList,
-    MatListItem,
-    MatCardFooter,
-    MatIcon,
-    MatButton,
-    MatButton,
-    MatIconButton,
-    MatTabGroup,
-    MatTab,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatCard,
+        MatCardContent,
+        MatCardHeader,
+        MatList,
+        MatListItem,
+        MatCardFooter,
+        MatIcon,
+        MatButton,
+        MatButton,
+        MatIconButton,
+        MatTabGroup,
+        MatTab,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatProgressSpinner,
+    ],
   providers: [
     SwapiConnectorService,
     AppStateService,
