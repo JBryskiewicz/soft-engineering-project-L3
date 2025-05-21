@@ -1,0 +1,15 @@
+.list-view-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 32px 0;
+
+  .object-card {
+    width: 430px;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}

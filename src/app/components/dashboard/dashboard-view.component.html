@@ -1,0 +1,51 @@
+<div class="list-view">
+  <ng-container *ngIf="state.currentUser$ | async; else notLoggedIn">
+
+    <header class="list-view-header">
+      <button
+        (click)="toggleFavoriteFilter()"
+        [style]="onlyFavorites ? 'background-color: #a1a1a1': ''"
+        mat-stroked-button
+        color="primary"
+      >
+        Show only favorites
+      </button>
+      <button
+        (click)="handleLogoutButton()"
+        mat-stroked-button
+        color="primary"
+      >
+        Log out {{ state.currentUser$.value.username }}
+      </button>
+    </header>
+
+    <ng-container *ngIf="state.isAppReady$ | async; else isLoading;">
+
+      <mat-tab-group>
+        <mat-tab [label]="MULTI_LIST_CONFIG.PEOPLE.tabLabel">
+          <multipurpose-list
+            [config]="MULTI_LIST_CONFIG.PEOPLE"
+            [data]="swapiPeople"
+          ></multipurpose-list>
+        </mat-tab>
+
+        <mat-tab [label]="MULTI_LIST_CONFIG.STARSHIPS.tabLabel">
+          Work in Progress
+        </mat-tab>
+      </mat-tab-group>
+
+    </ng-container>
+
+  </ng-container>
+
+  <ng-template #isLoading>
+    <div style="width: 100%; height: 90%; display: flex; justify-content: center; align-items: center">
+      <h1>Loading...</h1>
+    </div>
+  </ng-template>
+
+  <ng-template #notLoggedIn>
+    Error: Please log in to view dashboard.
+  </ng-template>
+
+</div>

@@ -1,0 +1,36 @@
+  <div class="list-view-container">
+    <ng-container *ngFor="let entry of data">
+      <mat-card appearance="outlined" class="object-card">
+
+        <mat-card-content>
+          <mat-list>
+            <ng-container *ngFor="let detail of Object.entries(entry)">
+              <mat-list-item *ngIf="checkShouldDisplayInfo(detail[0])">
+                <span style="text-transform: capitalize">{{ detail[0] }}: </span>
+                <span>{{ detail[1] }}</span>
+              </mat-list-item>
+            </ng-container>
+          </mat-list>
+        </mat-card-content>
+
+        <mat-card-footer>
+          <div
+            style="display: flex; align-items: center; justify-content: flex-end; margin-right: 16px; margin-bottom: 16px;">
+            <button mat-button color="primary" (click)="showDetails(entry)">
+              Show details
+            </button>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="toggleFavorite(entry)"
+            >
+              <mat-icon>
+                {{ entry.isFavorite ? 'favorite' : 'favorite_outlined' }}
+              </mat-icon>
+            </button>
+          </div>
+        </mat-card-footer>
+
+      </mat-card>
+    </ng-container>
+  </div>

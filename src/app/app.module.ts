@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {SwapiConnectorService} from './services/swapi-connector.service';
 import {HttpClientModule} from '@angular/common/http';
-import { ListViewComponent } from './components/dashboard/list-view/list-view.component';
+import { DashboardView } from './components/dashboard/dashboard-view.component';
 import { ListViewShipsComponent } from './components/dashboard/list-view-ships/list-view-ships.component';
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader} from "@angular/material/card";
 import {MatList, MatListItem} from '@angular/material/list';
@@ -24,14 +24,16 @@ import {MatInput} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import { DetailsDialogComponent } from './components/commons/details-dialog/details-dialog/details-dialog.component';
+import { MultipurposeListComponent } from './components/dashboard/multipurpose-list/multipurpose-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListViewComponent,
+    DashboardView,
     ListViewShipsComponent,
     LoginPageComponent,
-    DetailsDialogComponent
+    DetailsDialogComponent,
+    MultipurposeListComponent
   ],
     imports: [
         BrowserModule,

@@ -1,8 +1,8 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {SwapiDisplayPerson} from '../../../../domain/types';
 import {SwapiConnectorService} from '../../../../services/swapi-connector.service';
 import {take} from 'rxjs';
+import {DetailsDialogData} from '../../../../domain/types';
 
 @Component({
   selector: 'details-dialog',
@@ -17,11 +17,11 @@ export class DetailsDialogComponent {
   protected description: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: SwapiDisplayPerson,
+    @Inject(MAT_DIALOG_DATA) public data: DetailsDialogData,
     private swapiConnector: SwapiConnectorService,
   ) {
     this.swapiConnector
-      .getPersonDetails(data.url)
+      .getPersonDetails(data.entity.url)
       .pipe(take(1))
       .subscribe(response => {
         this.description = response.result.description;

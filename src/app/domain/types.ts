@@ -10,7 +10,7 @@ export interface AppUser {
 
 /** Swapi - People interfaces */
 
-export interface NewSwapiPersonDto {
+export interface SwapiEntity {
   uid: string,
   name: string,
   url: string,
@@ -71,4 +71,9 @@ export interface SwapiStarshipDto {
   films: string[];
   pilots: string[];
   starship_class: string;
+}
+
+export interface DetailsDialogData {
+  entity: SwapiEntity,
+  context: string,
 }
