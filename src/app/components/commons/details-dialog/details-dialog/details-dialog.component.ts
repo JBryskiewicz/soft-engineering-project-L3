@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SwapiConnectorService} from '../../../../services/swapi-connector.service';
 import {take} from 'rxjs';
 import {DetailsDialogData} from '../../../../domain/types';
+import {MULTI_LIST_CONFIG} from '../../../../utils/multipurpose-list-configs';
 
 @Component({
   selector: 'details-dialog',
@@ -15,11 +16,13 @@ export class DetailsDialogComponent {
   protected isLoaded: boolean = false;
   protected properties: any;
   protected description: any;
+  protected context: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DetailsDialogData,
     private swapiConnector: SwapiConnectorService,
   ) {
+    this.context = data.context;
     this.swapiConnector
       .getPersonDetails(data.entity.url)
       .pipe(take(1))
@@ -30,4 +33,5 @@ export class DetailsDialogComponent {
       });
   }
 
+  protected readonly MULTI_LIST_CONFIG = MULTI_LIST_CONFIG;
 }

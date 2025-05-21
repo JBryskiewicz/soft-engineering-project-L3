@@ -1,11 +1,28 @@
 <div class="object__details">
   <ng-container *ngIf="isLoaded; else isLoading">
-    <p>Description: {{ description }}</p>
-    <p>Name: {{ properties.name }}</p>
-    <p>Gander: {{ properties.gender }}</p>
-    <p>Height: {{ properties.height }}</p>
-    <p>Year of Birth: {{ properties.birth_year }}</p>
+    <ng-container *ngIf="context === 'people';else starship ">
+    <mat-list>
+      <mat-list-item>Description: {{ description }}</mat-list-item>
+      <mat-list-item>Name: {{ properties.name }}</mat-list-item>
+      <mat-list-item>Gender: {{ properties.gender }}</mat-list-item>
+      <mat-list-item>Height: {{ properties.height }} cm</mat-list-item>
+      <mat-list-item>Year of Birth: {{ properties.birth_year }}</mat-list-item>
+      <mat-list-item>Hair Color: {{ properties.hair_color }}</mat-list-item>
+      <mat-list-item>Eye Color: {{ properties.eye_color }}</mat-list-item>
+    </mat-list>
+    </ng-container>
   </ng-container>
+
+  <ng-template #starship>
+    <mat-list>
+      <mat-list-item>Description: {{ description }}</mat-list-item>
+      <mat-list-item>Name: {{ properties.name }}</mat-list-item>
+      <mat-list-item>Length: {{ properties.length }} m</mat-list-item>
+      <mat-list-item>Crew: {{ properties.crew }}</mat-list-item>
+      <mat-list-item>Capacity: {{ properties.cargo_capacity }}</mat-list-item>
+      <mat-list-item>Cost: {{ properties.cost_in_credits }} credits</mat-list-item>
+    </mat-list>
+  </ng-template>
 
   <ng-template #isLoading>
     <h1>Loading...</h1>
