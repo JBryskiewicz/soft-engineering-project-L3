@@ -3,6 +3,9 @@
       <mat-card appearance="outlined" class="object-card">
 
         <mat-card-content>
+          <div style="display: flex; justify-content: center; width: 100%;">
+            <h3 style="margin: 0; font-weight: 500">{{ config.cardTitle }}</h3>
+          </div>
           <mat-list>
             <ng-container *ngFor="let detail of Object.entries(entry)">
               <mat-list-item *ngIf="checkShouldDisplayInfo(detail[0])">

@@ -22,6 +22,7 @@
     <ng-container *ngIf="state.isAppReady$ | async; else isLoading;">
 
       <mat-tab-group>
+
         <mat-tab [label]="MULTI_LIST_CONFIG.PEOPLE.tabLabel">
           <multipurpose-list
             [config]="MULTI_LIST_CONFIG.PEOPLE"
@@ -30,8 +31,12 @@
         </mat-tab>
 
         <mat-tab [label]="MULTI_LIST_CONFIG.STARSHIPS.tabLabel">
-          Work in Progress
+          <multipurpose-list
+            [config]="MULTI_LIST_CONFIG.STARSHIPS"
+            [data]="swapiStarships"
+          ></multipurpose-list>
         </mat-tab>
+
       </mat-tab-group>
 
     </ng-container>

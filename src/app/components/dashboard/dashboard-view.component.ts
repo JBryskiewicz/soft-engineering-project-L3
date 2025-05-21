@@ -17,6 +17,8 @@ export class DashboardView implements OnInit {
 
   protected swapiPeopleFilterControl: SwapiEntity[] = [];
 
+  protected swapiStarshipFilterControl: SwapiEntity[] = [];
+
   protected swapiPeople: SwapiEntity[] = [];
 
   protected swapiStarships: SwapiEntity[] = [];
@@ -37,17 +39,20 @@ export class DashboardView implements OnInit {
         this.state.peopleCache$.subscribe(people => {
           this.swapiPeople = this.buildData(people);
         });
+        this.state.starshipsCache$.subscribe(ships => {
+          this.swapiStarships = this.buildData(ships)
+        })
       }
     })
   }
 
-  private buildData(people: SwapiEntity[]): SwapiEntity[] {
-    return people.map(person => {
+  private buildData(entities: SwapiEntity[]): SwapiEntity[] {
+    return entities.map(entity => {
       return {
-        uid: person.uid,
-        name: person.name,
-        url: person.url,
-        isFavorite: this.matchFavoriteEntityFromSaved(person),
+        uid: entity.uid,
+        name: entity.name,
+        url: entity.url,
+        isFavorite: this.matchFavoriteEntityFromSaved(entity),
       } as SwapiEntity;
     });
   }
@@ -67,6 +72,7 @@ export class DashboardView implements OnInit {
     this.handleFilterChange();
   }
 
+  // TODO context needed to avoid redundant actions
   protected handleFilterChange(): void {
     if (this.onlyFavorites) {
       this.swapiPeopleFilterControl = this.swapiPeople;
