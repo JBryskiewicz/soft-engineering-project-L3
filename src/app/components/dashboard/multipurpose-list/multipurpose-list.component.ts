@@ -6,6 +6,7 @@ import {DbConnectorService} from '../../../services/db-connector.service';
 import {DetailsDialogComponent} from '../../commons/details-dialog/details-dialog/details-dialog.component';
 import {take} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
+import {SwapiConnectorService} from '../../../services/swapi-connector.service';
 
 @Component({
   selector: 'multipurpose-list',
@@ -27,6 +28,7 @@ export class MultipurposeListComponent {
     private state: AppStateService,
     private db: DbConnectorService,
     private dialog: MatDialog,
+    private swapiConnector: SwapiConnectorService,
   ) {
     this.config = MULTI_LIST_CONFIG.PEOPLE; // for now default
   }
@@ -90,7 +92,61 @@ export class MultipurposeListComponent {
   }
 
   protected checkShouldDisplayInfo(detail: string): boolean {
-    return detail !== 'url' && detail !== 'isFavorite' && detail !== 'uid'
+    return detail !== 'url' && detail !== 'isFavorite' && detail !== 'uid' && detail !== 'selectedForComparison'
+  }
+
+  protected selectedObjects: SwapiEntity[] = [];
+  protected showComparison: boolean = false;
+  protected selectedFullDetails: any[] = [];
+
+  protected selectForComparison(object: SwapiEntity): void {
+    const objWithFlag = object as SwapiEntity & { selectedForComparison?: boolean };
+    const alreadySelected = this.selectedFullDetails.find(o => o.url === object.url);
+
+    if (alreadySelected) {
+      this.selectedFullDetails = this.selectedFullDetails.filter(o => o.url !== object.url);
+      this.selectedObjects = this.selectedObjects.filter(o => o.url !== object.url);
+      objWithFlag.selectedForComparison = false;
+    } else if (this.selectedFullDetails.length < 2) {
+      this.swapiConnector
+        .getPersonDetails(object.url)
+        .pipe(take(1))
+        .subscribe(response => {
+          const fullData = {
+            ...response.result.properties,
+            description: response.result.description,
+            url: object.url,
+            name: object.name || object.uid || 'Entity',
+          };
+          this.selectedFullDetails.push(fullData);
+          this.selectedObjects.push(object);
+          objWithFlag.selectedForComparison = true;
+          this.showComparison = this.selectedObjects.length === 2;
+        });
+    }
+  }
+
+  protected isSelectedForComparison(object: any): boolean {
+    return this.selectedObjects.some(o => o.url === object.url);
+  }
+
+  protected clearComparison(): void {
+    this.selectedObjects.forEach(obj => {
+      const objWithFlag = obj as SwapiEntity & { selectedForComparison?: boolean };
+      objWithFlag.selectedForComparison = false;
+    });
+    this.selectedFullDetails = [];
+    this.selectedObjects = [];
+    this.showComparison = false;
+  }
+
+  protected objectEntries(obj: Record<string, any>): [string, any][] {
+    return Object.entries(obj);
+  }
+
+  protected filterObjectEntries(obj: Record<string, any>): [string, any][] {
+    const allowedKeys = ['name', 'height', 'mass', 'crew', 'length', 'description']; // Customize your fields
+    return Object.entries(obj).filter(([key]) => allowedKeys.includes(key));
   }
 
 }

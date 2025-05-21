@@ -1,4 +1,26 @@
-  <div class="list-view-container">
+<div *ngIf="showComparison" class="comparison-container">
+  <mat-card>
+  <mat-card-header>
+    <mat-card-title>Comparison</mat-card-title>
+  </mat-card-header>
+  <div style="display: flex; gap: 16px; justify-content: center;">
+    <mat-card class="comparison-card" *ngFor="let obj of selectedFullDetails">
+      <mat-card-title>{{ obj.name || obj.uid || 'Entity' }}</mat-card-title>
+      <mat-list>
+        <mat-list-item *ngFor="let entry of filterObjectEntries(obj)">
+          <strong style="text-transform: capitalize">{{ entry[0] }}:</strong>&nbsp;
+          <span>{{ entry[1] }}</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  </div>
+  <div style="text-align: center; margin-top: 16px;">
+    <button mat-button color="warn" (click)="clearComparison()">Clear Comparison</button>
+  </div>
+  </mat-card>
+</div>
+
+<div class="list-view-container">
     <ng-container *ngFor="let entry of data">
       <mat-card appearance="outlined" class="object-card">
 
@@ -22,6 +44,9 @@
             <button mat-button color="primary" (click)="showDetails(entry)">
               Show details
             </button>
+            <button mat-button (click)="selectForComparison(entry)">
+              {{ isSelectedForComparison(entry) ? 'Deselect' : 'Compare' }}
+            </button>
             <button
               mat-icon-button
               color="primary"
@@ -37,3 +62,4 @@
       </mat-card>
     </ng-container>
   </div>
+
