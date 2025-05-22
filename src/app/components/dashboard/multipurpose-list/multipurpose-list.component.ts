@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MULTI_LIST_CONFIG, MultiListConfig} from '../../../utils/multipurpose-list-configs';
-import {SwapiEntity} from '../../../domain/types';
+import {AppUser, SwapiEntity} from '../../../domain/types';
 import {AppStateService} from '../../../services/app-state.service';
 import {DbConnectorService} from '../../../services/db-connector.service';
 import {DetailsDialogComponent} from '../../commons/details-dialog/details-dialog/details-dialog.component';
@@ -21,6 +21,9 @@ export class MultipurposeListComponent {
   @Input()
   public data: any[] = [];
 
+  @Output()
+  public favoriteActionSafeguard: EventEmitter<any> = new EventEmitter();
+
   protected readonly Object = Object;
 
   constructor(
@@ -31,56 +34,86 @@ export class MultipurposeListComponent {
     this.config = MULTI_LIST_CONFIG.PEOPLE; // for now default
   }
 
-  private updateData(): void {
-    const userFavorites = this.state.currentUser$?.value.favoritePeople!;
+  private updatePeopleData(): void {
+    const userFavoritePeople = this.state.currentUser$.value.favoritePeople;
+
     this.data = this.data.map(person => {
-      if (userFavorites.some((p: any) => p.url === person.url)) {
-        return {
-          ...person,
-          isFavorite: true,
-        }
+      if (userFavoritePeople.some((p: any) => p.url === person.url)) {
+        return { ...person,  isFavorite: true }
       } else {
-        return {
-          ...person,
-          isFavorite: false,
-        };
+        return { ...person,  isFavorite: false };
       }
     });
+    this.state.refreshUsersFavorites(this.state.currentUser$.value);
   }
 
-  // TODO need to adjust to include more types of favorite entities.
-  protected toggleFavorite(object: SwapiEntity): void {
+  private updateStarshipData(): void {
+    const userFavoriteStarships = this.state.currentUser$.value.favoriteStarships;
+
+    this.data = this.data.map(starship => {
+      if (userFavoriteStarships.some((s: any) => s.url === starship.url)) {
+        return { ...starship,  isFavorite: true }
+      } else {
+        return { ...starship,  isFavorite: false };
+      }
+    });
+    this.state.refreshUsersFavorites(this.state.currentUser$.value);
+  }
+
+  protected toggleFavorite(entity: SwapiEntity): void {
+
+    this.favoriteActionSafeguard.emit(); // Emit signal to parent component
+
     const user = this.state.currentUser$.value;
 
-    if (object.isFavorite) {
-      const filteredFavorites = user.favoritePeople.filter((obj: any) => obj.url !== object.url);
-      const modifiedUser = {
-        ...user,
-        favoritePeople: filteredFavorites
-      };
-      this.db.updateUserById(user.id, modifiedUser).subscribe(() => {
-        this.updateData();
-      });
+    if (this.config.context === MULTI_LIST_CONFIG.PEOPLE.context) {
+      this.handleFavoriteForSwapiPerson(entity, user);
+      return;
+    }
+    if (this.config.context === MULTI_LIST_CONFIG.STARSHIPS.context) {
+      this.handleFavoriteForSwapiStarship(entity, user);
+      return;
+    }
+  }
+
+  private handleFavoriteForSwapiPerson(entity: SwapiEntity, user: AppUser): void {
+
+    if (entity.isFavorite) {
+      const filteredFavorites = user.favoritePeople.filter((obj: any) => obj.url !== entity.url);
+      const modifiedUser = { ...user,  favoritePeople: filteredFavorites };
+      this.db.updateUserById(user.id, modifiedUser).subscribe(() => this.updatePeopleData());
       return;
     }
 
     const currentFavorites = user.favoritePeople;
-    if (!currentFavorites.some((cf: any) => cf.url === object.url)) {
-      currentFavorites.push({...object, isFavorite: true});
-      const modifiedUser = {
-        ...user,
-        favoritePeople: currentFavorites
-      }
-      this.db.updateUserById(user.id, modifiedUser).subscribe(() => {
-        this.updateData();
-      });
+    if (!currentFavorites.some((cf: any) => cf.url === entity.url)) {
+      currentFavorites.push({...entity, isFavorite: true});
+      const modifiedUser = { ...user,  favoritePeople: currentFavorites }
+      this.db.updateUserById(user.id, modifiedUser).subscribe(() => this.updatePeopleData());
+    }
+  }
+
+  private handleFavoriteForSwapiStarship(entity: SwapiEntity, user: AppUser): void {
+
+    if (entity.isFavorite) {
+      const filteredFavorites = user.favoriteStarships.filter((obj: any) => obj.url !== entity.url);
+      const modifiedUser = { ...user,  favoriteStarships: filteredFavorites };
+      this.db.updateUserById(user.id, modifiedUser).subscribe(() => this.updateStarshipData());
+      return;
+    }
+
+    const currentFavorites = user.favoriteStarships;
+    if (!currentFavorites.some((cf: any) => cf.url === entity.url)) {
+      currentFavorites.push({...entity, isFavorite: true});
+      const modifiedUser = { ...user,  favoriteStarships: currentFavorites }
+      this.db.updateUserById(user.id, modifiedUser).subscribe(() => this.updateStarshipData());
     }
   }
 
   protected showDetails(object: SwapiEntity): void {
     const data = {entity: object, context: this.config.context}
 
-    this.dialog.open(DetailsDialogComponent, { data })
+    this.dialog.open(DetailsDialogComponent, {data})
       .afterClosed()
       .pipe(take(1))
       .subscribe(result => {
