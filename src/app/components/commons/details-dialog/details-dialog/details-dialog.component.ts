@@ -13,10 +13,10 @@ import {MULTI_LIST_CONFIG} from '../../../../utils/multipurpose-list-configs';
 })
 export class DetailsDialogComponent {
 
-  protected isLoaded: boolean = false;
-  protected properties: any;
-  protected description: any;
-  protected context: string;
+  public isLoaded: boolean = false;
+  public properties: any;
+  public description: any;
+  public context: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DetailsDialogData,

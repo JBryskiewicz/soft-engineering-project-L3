@@ -13,19 +13,19 @@ import {MULTI_LIST_CONFIG} from '../../utils/multipurpose-list-configs';
 })
 export class DashboardView implements OnInit {
 
-  protected readonly Object = Object;
+  public readonly Object = Object;
 
-  protected swapiPeopleFilterControl: SwapiEntity[] = [];
+  public swapiPeopleFilterControl: SwapiEntity[] = [];
 
-  protected swapiStarshipFilterControl: SwapiEntity[] = [];
+  public swapiStarshipFilterControl: SwapiEntity[] = [];
 
-  protected swapiPeople: SwapiEntity[] = [];
+  public swapiPeople: SwapiEntity[] = [];
 
-  protected swapiStarships: SwapiEntity[] = [];
+  public swapiStarships: SwapiEntity[] = [];
 
-  protected onlyFavorites: boolean = false;
+  public onlyFavorites: boolean = false;
 
-  protected readonly MULTI_LIST_CONFIG = MULTI_LIST_CONFIG;
+  public readonly MULTI_LIST_CONFIG = MULTI_LIST_CONFIG;
 
   constructor(
     protected state: AppStateService,
@@ -65,18 +65,18 @@ export class DashboardView implements OnInit {
     return Boolean(this.state.currentUser$.value.favoriteStarships.find((s: any) => s.url === entity.url));
   }
 
-  protected handleLogoutButton(): void {
+  public handleLogoutButton(): void {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     this.state.clearLoggedInUser();
     this.router.navigate(['']);
   }
 
-  protected toggleFavoriteFilter() {
+  public toggleFavoriteFilter() {
     this.onlyFavorites = !this.onlyFavorites;
     this.handleFilterChange();
   }
 
-  protected handleFilterChange(): void {
+  public handleFilterChange(): void {
     if (this.onlyFavorites) {
       this.swapiPeopleFilterControl = this.swapiPeople;
       this.swapiPeople = this.swapiPeople.filter(person => person.isFavorite);
@@ -88,7 +88,7 @@ export class DashboardView implements OnInit {
     }
   }
 
-  protected handleSafeguardEmitter(): void {
+  public handleSafeguardEmitter(): void {
     this.onlyFavorites = false;
   }
 }

@@ -60,7 +60,7 @@ export class MultipurposeListComponent {
     this.state.refreshUsersFavorites(this.state.currentUser$.value);
   }
 
-  protected toggleFavorite(entity: SwapiEntity): void {
+  public toggleFavorite(entity: SwapiEntity): void {
 
     this.favoriteActionSafeguard.emit(); // Emit signal to parent component
 
@@ -110,7 +110,7 @@ export class MultipurposeListComponent {
     }
   }
 
-  protected showDetails(object: SwapiEntity): void {
+  public showDetails(object: SwapiEntity): void {
     const data = {entity: object, context: this.config.context}
 
     this.dialog.open(DetailsDialogComponent, {data})
@@ -122,7 +122,7 @@ export class MultipurposeListComponent {
       });
   }
 
-  protected checkShouldDisplayInfo(detail: string): boolean {
+  public checkShouldDisplayInfo(detail: string): boolean {
     return detail !== 'url' && detail !== 'isFavorite' && detail !== 'uid'
   }
 

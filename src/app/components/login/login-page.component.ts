@@ -5,15 +5,6 @@ import {take} from 'rxjs';
 import {Router} from '@angular/router';
 import {AUTH_TOKEN_KEY} from '../../../environments/env';
 import {AppStateService} from '../../services/app-state.service';
-// import {Validator, FormGroup} from '@angular/forms'
-
-// TODO For Ignacy => You can implement simple input validation
-// https://v17.angular.io/guide/form-validation -> We use Reactive Forms here
-// Also, if username exists on register validation should not pass and register fails.
-// Display message that user was registered successfully,
-// automatically fill the loginForm and switch mode to isLoginMode = true;
-
-// const INIT_FORM = {username: '', password: ''}
 
 @Component({
   selector: 'login-page',
@@ -23,9 +14,9 @@ import {AppStateService} from '../../services/app-state.service';
 })
 export class LoginPageComponent {
 
-  protected loginForm: UntypedFormGroup;
+  public loginForm: UntypedFormGroup;
 
-  protected isLoginMode: boolean = true;
+  public isLoginMode: boolean = true;
 
   constructor(
     private db: DbConnectorService,
@@ -39,11 +30,11 @@ export class LoginPageComponent {
     });
   }
 
-  protected switchLoginMode(): void {
+  public switchLoginMode(): void {
     this.isLoginMode = !this.isLoginMode;
   }
 
-  protected handleLoginOrRegister(): void {
+  public handleLoginOrRegister(): void {
     if (this.loginForm.invalid) {
       console.error('Form invalid');
       return;
