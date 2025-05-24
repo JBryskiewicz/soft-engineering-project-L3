@@ -5,15 +5,15 @@
 
     <div class="login-view__form-inputs">
       <form [formGroup]="loginForm">
-          <mat-form-field style="width: 100%;" appearance="outline">
-            <mat-label>{{ isLoginMode ? 'Login' : 'Username' }}</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Username"
-              formControlName="username"
-            >
-          </mat-form-field>
+        <mat-form-field style="width: 100%;" appearance="outline">
+          <mat-label>{{ isLoginMode ? 'Login' : 'Username' }}</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Username"
+            formControlName="username"
+          >
+        </mat-form-field>
         <mat-form-field style="width: 100%;" appearance="outline">
           <mat-label>Password</mat-label>
           <input
@@ -23,9 +23,11 @@
             formControlName="password"
           >
         </mat-form-field>
+        <div *ngIf="loginError.isError" style="display: flex; justify-content: center; margin-bottom: 16px;">
+          <span style="color: darkred">{{ loginError.errorMessage }}</span>
+        </div>
       </form>
     </div>
-
     <div class="login-view__form-buttons">
       <button mat-button color="primary" (click)="switchLoginMode();">
         {{ isLoginMode ? 'Sign up instead' : 'Log in instead' }}

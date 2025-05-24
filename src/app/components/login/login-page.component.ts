@@ -1,4 +1,4 @@
-import {Component, NgZone} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {FormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DbConnectorService} from '../../services/db-connector.service';
 import {take} from 'rxjs';
@@ -12,11 +12,13 @@ import {AppStateService} from '../../services/app-state.service';
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit{
 
   public loginForm: UntypedFormGroup;
 
   public isLoginMode: boolean = true;
+
+  public loginError: {isError: boolean; errorMessage: string} = {isError: false, errorMessage: 'Invalid Input'};
 
   constructor(
     private db: DbConnectorService,
@@ -30,15 +32,25 @@ export class LoginPageComponent {
     });
   }
 
+  ngOnInit() {
+    this.loginForm.valueChanges.subscribe(() => {
+      if (this.loginError.isError) {
+        this.loginError = { isError: false, errorMessage: '' };
+      }
+    })
+  }
+
   public switchLoginMode(): void {
     this.isLoginMode = !this.isLoginMode;
   }
 
   public handleLoginOrRegister(): void {
     if (this.loginForm.invalid) {
-      console.error('Form invalid');
+      const message = this.isLoginMode ? 'Incorrect credentials' : 'Input invalid'
+      this.loginError = { isError: true, errorMessage: message };
       return;
     }
+
     this.isLoginMode
       ? this.loginAction()
       : this.registerAction();
