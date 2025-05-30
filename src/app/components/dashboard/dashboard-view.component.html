@@ -27,6 +27,7 @@
           <multipurpose-list
             [config]="MULTI_LIST_CONFIG.PEOPLE"
             [data]="swapiPeople"
+            (favoriteActionSafeguard)="handleSafeguardEmitter()"
           ></multipurpose-list>
         </mat-tab>
 
@@ -34,6 +35,7 @@
           <multipurpose-list
             [config]="MULTI_LIST_CONFIG.STARSHIPS"
             [data]="swapiStarships"
+            (favoriteActionSafeguard)="handleSafeguardEmitter()"
           ></multipurpose-list>
         </mat-tab>
 

@@ -1,19 +1,10 @@
-import {Component, NgZone} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {FormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DbConnectorService} from '../../services/db-connector.service';
 import {take} from 'rxjs';
 import {Router} from '@angular/router';
 import {AUTH_TOKEN_KEY} from '../../../environments/env';
 import {AppStateService} from '../../services/app-state.service';
-// import {Validator, FormGroup} from '@angular/forms'
-
-// TODO For Ignacy => You can implement simple input validation
-// https://v17.angular.io/guide/form-validation -> We use Reactive Forms here
-// Also, if username exists on register validation should not pass and register fails.
-// Display message that user was registered successfully,
-// automatically fill the loginForm and switch mode to isLoginMode = true;
-
-// const INIT_FORM = {username: '', password: ''}
 
 @Component({
   selector: 'login-page',
@@ -21,11 +12,13 @@ import {AppStateService} from '../../services/app-state.service';
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit{
 
-  protected loginForm: UntypedFormGroup;
+  public loginForm: UntypedFormGroup;
 
-  protected isLoginMode: boolean = true;
+  public isLoginMode: boolean = true;
+
+  public loginError: {isError: boolean; errorMessage: string} = {isError: false, errorMessage: 'Invalid Input'};
 
   constructor(
     private db: DbConnectorService,
@@ -39,15 +32,25 @@ export class LoginPageComponent {
     });
   }
 
-  protected switchLoginMode(): void {
+  ngOnInit() {
+    this.loginForm.valueChanges.subscribe(() => {
+      if (this.loginError.isError) {
+        this.loginError = { isError: false, errorMessage: '' };
+      }
+    })
+  }
+
+  public switchLoginMode(): void {
     this.isLoginMode = !this.isLoginMode;
   }
 
-  protected handleLoginOrRegister(): void {
+  public handleLoginOrRegister(): void {
     if (this.loginForm.invalid) {
-      console.error('Form invalid');
+      const message = this.isLoginMode ? 'Incorrect credentials' : 'Input invalid'
+      this.loginError = { isError: true, errorMessage: message };
       return;
     }
+
     this.isLoginMode
       ? this.loginAction()
       : this.registerAction();

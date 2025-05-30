@@ -13,19 +13,19 @@ import {MULTI_LIST_CONFIG} from '../../utils/multipurpose-list-configs';
 })
 export class DashboardView implements OnInit {
 
-  protected readonly Object = Object;
+  public readonly Object = Object;
 
-  protected swapiPeopleFilterControl: SwapiEntity[] = [];
+  public swapiPeopleFilterControl: SwapiEntity[] = [];
 
-  protected swapiStarshipFilterControl: SwapiEntity[] = [];
+  public swapiStarshipFilterControl: SwapiEntity[] = [];
 
-  protected swapiPeople: SwapiEntity[] = [];
+  public swapiPeople: SwapiEntity[] = [];
 
-  protected swapiStarships: SwapiEntity[] = [];
+  public swapiStarships: SwapiEntity[] = [];
 
-  protected onlyFavorites: boolean = false;
+  public onlyFavorites: boolean = false;
 
-  protected readonly MULTI_LIST_CONFIG = MULTI_LIST_CONFIG;
+  public readonly MULTI_LIST_CONFIG = MULTI_LIST_CONFIG;
 
   constructor(
     protected state: AppStateService,
@@ -37,49 +37,58 @@ export class DashboardView implements OnInit {
     this.state.currentUser$.subscribe((user: AppUser) => {
       if (user) {
         this.state.peopleCache$.subscribe(people => {
-          this.swapiPeople = this.buildData(people);
+          this.swapiPeople = this.buildData(people, 'people');
         });
         this.state.starshipsCache$.subscribe(ships => {
-          this.swapiStarships = this.buildData(ships)
+          this.swapiStarships = this.buildData(ships, 'starships')
         })
       }
     })
   }
 
-  private buildData(entities: SwapiEntity[]): SwapiEntity[] {
+  private buildData(entities: SwapiEntity[], context: 'people' | 'starships'): SwapiEntity[] {
     return entities.map(entity => {
       return {
         uid: entity.uid,
         name: entity.name,
         url: entity.url,
-        isFavorite: this.matchFavoriteEntityFromSaved(entity),
+        isFavorite: this.matchFavoriteEntityFromSaved(entity, context),
       } as SwapiEntity;
     });
   }
 
-  private matchFavoriteEntityFromSaved(entity: SwapiEntity): boolean {
-    return Boolean(this.state.currentUser$?.value.favoritePeople.find((p: any) => p.url === entity.url));
+  private matchFavoriteEntityFromSaved(entity: SwapiEntity, context: 'people' | 'starships'): boolean {
+    if (context === 'people') {
+      return Boolean(this.state.currentUser$.value.favoritePeople.find((p: any) => p.url === entity.url));
+    }
+    // Else starships
+    return Boolean(this.state.currentUser$.value.favoriteStarships.find((s: any) => s.url === entity.url));
   }
 
-  protected handleLogoutButton(): void {
+  public handleLogoutButton(): void {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     this.state.clearLoggedInUser();
     this.router.navigate(['']);
   }
 
-  protected toggleFavoriteFilter() {
+  public toggleFavoriteFilter() {
     this.onlyFavorites = !this.onlyFavorites;
     this.handleFilterChange();
   }
 
-  // TODO context needed to avoid redundant actions
-  protected handleFilterChange(): void {
+  public handleFilterChange(): void {
     if (this.onlyFavorites) {
       this.swapiPeopleFilterControl = this.swapiPeople;
       this.swapiPeople = this.swapiPeople.filter(person => person.isFavorite);
+      this.swapiStarshipFilterControl = this.swapiStarships;
+      this.swapiStarships = this.swapiStarships.filter(ship => ship.isFavorite);
     } else {
       this.swapiPeople = this.swapiPeopleFilterControl;
+      this.swapiStarships = this.swapiStarshipFilterControl;
     }
   }
 
+  public handleSafeguardEmitter(): void {
+    this.onlyFavorites = false;
+  }
 }

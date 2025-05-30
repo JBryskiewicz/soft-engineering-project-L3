@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import {SwapiConnectorService} from './services/swapi-connector.service';
 import {HttpClientModule} from '@angular/common/http';
 import { DashboardView } from './components/dashboard/dashboard-view.component';
-import { ListViewShipsComponent } from './components/dashboard/list-view-ships/list-view-ships.component';
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {MatList, MatListItem} from '@angular/material/list';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -30,7 +29,6 @@ import { MultipurposeListComponent } from './components/dashboard/multipurpose-l
   declarations: [
     AppComponent,
     DashboardView,
-    ListViewShipsComponent,
     LoginPageComponent,
     DetailsDialogComponent,
     MultipurposeListComponent

@@ -4,8 +4,8 @@ export interface AppUser {
   id: string;
   username: string;
   password: string;
-  favoritePeople: SwapiDisplayPerson[];
-  favoriteStarships: SwapiDisplayStarship[];
+  favoritePeople: SwapiEntity[];
+  favoriteStarships: SwapiEntity[];
 }
 
 /** Swapi - People interfaces */
