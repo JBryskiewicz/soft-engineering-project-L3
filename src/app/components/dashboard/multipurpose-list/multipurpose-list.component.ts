@@ -173,13 +173,19 @@ export class MultipurposeListComponent {
     this.showComparison = false;
   }
 
-  protected objectEntries(obj: Record<string, any>): [string, any][] {
-    return Object.entries(obj);
-  }
-
   protected filterObjectEntries(obj: Record<string, any>): [string, any][] {
     const allowedKeys = ['name', 'height', 'mass', 'crew', 'length', 'description']; // Customize your fields
     return Object.entries(obj).filter(([key]) => allowedKeys.includes(key));
   }
 
+  protected getHighlightClass(stat: string, value: any): string {
+    const values = this.selectedFullDetails
+      .map(obj => parseFloat(obj[stat]))
+      .filter(val => !isNaN(val));
+
+    if (values.length < 2 || isNaN(parseFloat(value))) return '';
+
+    const max = Math.max(...values);
+    return parseFloat(value) === max ? 'highlight' : '';
+  }
 }
