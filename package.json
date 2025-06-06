@@ -49,8 +49,11 @@
   "build": {
     "appId": "softeng.l3",
     "productName": "SoftEngL3",
+    "win": {
+      "target": "nsis"
+    },
     "mac": {
-      "category": "public.app-category.developer-tools"
+      "target": []
     },
     "files": [
       "**/*",
